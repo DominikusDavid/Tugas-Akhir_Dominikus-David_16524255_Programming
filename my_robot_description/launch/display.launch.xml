@@ -1,0 +1,25 @@
+<launch>
+
+    <!-- Mendefinisikan path untuk file URDF robot menggunakan xacro -->
+    <let name="urdf_path" 
+         value="$(find-pkg-share my_robot_description)/urdf/my_robot.urdf.xacro" />
+
+    <!-- Mendefinisikan path untuk file konfigurasi RViz -->
+    <let name="rviz_config_path"
+         value="$(find-pkg-share my_robot_description)/rviz/rviz_config.rviz" />
+
+    <!-- Node untuk mempublikasikan status robot menggunakan robot_state_publisher -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <!-- Parameter untuk mendefinisikan deskripsi robot dari file URDF -->
+        <param name="robot_description" 
+               value="$(command 'xacro $(var urdf_path)')"/>
+    </node>
+
+    <!-- Node untuk GUI joint state publisher -->
+    <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" />
+
+    <!-- Node untuk meluncurkan RViz dengan konfigurasi yang ditentukan -->
+    <node pkg="rviz2" exec="rviz2" output="screen" 
+          args="-d $(var rviz_config_path)"/>
+
+</launch>
